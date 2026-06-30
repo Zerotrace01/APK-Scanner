@@ -1,0 +1,84 @@
+# DroidScan — Docker Compose
+# Run: docker-compose up --build
+
+services:
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER:     droidscan
+      POSTGRES_PASSWORD: droidscan
+      POSTGRES_DB:       droidscan
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U droidscan"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL:          postgresql://droidscan:droidscan@postgres/droidscan
+      REDIS_URL:             redis://redis:6379/0
+      ABUSEIPDB_KEY:         ${ABUSEIPDB_KEY:-c415516019cdfb4ac60003bb6e17053406b35931ff6fc1a198937f230388ed062f5943354c1de0cb}
+      VIRUSTOTAL_KEY:        ${VIRUSTOTAL_KEY:-115c4bd34450bbe23c13b4bf80261e098e53260360317d36f00e632647b78e31}
+      SANDBOX_TIMEOUT:       "60"
+      SKIP_DYNAMIC_SANDBOX:  ${SKIP_DYNAMIC_SANDBOX:-true}
+    volumes:
+      - uploads:/app/uploads
+      - reports:/app/reports
+    depends_on:
+      redis:    { condition: service_healthy }
+      postgres: { condition: service_healthy }
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+
+  worker:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL:          postgresql://droidscan:droidscan@postgres/droidscan
+      REDIS_URL:             redis://redis:6379/0
+      ABUSEIPDB_KEY:         ${ABUSEIPDB_KEY:-c415516019cdfb4ac60003bb6e17053406b35931ff6fc1a198937f230388ed062f5943354c1de0cb}
+      VIRUSTOTAL_KEY:        ${VIRUSTOTAL_KEY:-115c4bd34450bbe23c13b4bf80261e098e53260360317d36f00e632647b78e31}
+      SANDBOX_TIMEOUT:       "60"
+      SKIP_DYNAMIC_SANDBOX:  ${SKIP_DYNAMIC_SANDBOX:-true}
+    volumes:
+      - uploads:/app/uploads
+      - reports:/app/reports
+    depends_on:
+      redis:    { condition: service_healthy }
+      postgres: { condition: service_healthy }
+    command: celery -A tasks worker --loglevel=info --concurrency=2
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
+  uploads:
+  reports:

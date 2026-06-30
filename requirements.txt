@@ -1,0 +1,51 @@
+# DroidScan — Python dependencies
+# Compatible with Python 3.14 (also works on 3.11+)
+# Install: pip install -r requirements.txt
+#
+# Note: yara-python has no prebuilt wheel for 3.14 yet — pip will build it
+# from source. Make sure you have a C compiler + libyara available first:
+#   sudo apt install -y build-essential libyara-dev
+
+# ── Web framework ─────────────────────────────────────────────────────────────
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9
+aiofiles==23.2.1
+
+# ── Task queue ────────────────────────────────────────────────────────────────
+celery==5.3.6
+redis==5.0.4
+
+# ── Database ──────────────────────────────────────────────────────────────────
+sqlalchemy==2.0.51
+psycopg2-binary==2.9.12
+
+# ── APK static analysis ───────────────────────────────────────────────────────
+# androguard bumped 3.3.5 -> 4.1.4 (major version) for py3.14 support.
+# AnalyzeAPK() still returns the same (apk, dx, dx) tuple our code expects,
+# but this is a major bump — worth a smoke test against a sample APK.
+androguard==4.1.4
+yara-python==4.5.4
+
+# ── Dynamic sandbox / instrumentation ────────────────────────────────────────
+# frida-tools removed: it only provides CLI binaries (frida-ps, frida-trace),
+# which nothing in this codebase imports — only `import frida` is used, and
+# the frida library itself supports py3.14. Install frida-tools separately
+# and only if you want those CLI tools for manual debugging.
+frida==17.15.1
+mitmproxy==12.2.3
+adbutils==2.12.0
+
+# ── Network + threat intel ────────────────────────────────────────────────────
+requests==2.32.2
+
+# ── ML classifier ────────────────────────────────────────────────────────────
+scikit-learn==1.7.2
+numpy==2.4.6
+joblib==1.4.2
+
+# ── PDF report generation ────────────────────────────────────────────────────
+reportlab==5.0.0
+
+# ── Utilities ────────────────────────────────────────────────────────────────
+python-dotenv==1.0.1
