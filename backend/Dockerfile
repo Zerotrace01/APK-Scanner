@@ -1,8 +1,8 @@
 # DroidScan — Backend Dockerfile (build context: repo root)
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    openjdk-17-jre-headless \
+    default-jre-headless \
     android-tools-adb \
     wget unzip curl \
     && rm -rf /var/lib/apt/lists/*
