@@ -2,7 +2,7 @@
 
 ---
 
-## 🎯 What it does
+## What it does
 
 DroidScan is a full-stack APK forensic analysis platform for law enforcement.
 Upload an Android APK — DroidScan tells you in minutes whether it's malicious,
@@ -12,7 +12,7 @@ court-ready PDF forensic report.
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 Investigator
@@ -49,7 +49,7 @@ Investigator
 
 ---
 
-## 🚀 Quick start
+## Quick start
 
 ### 1. Clone and configure
 ```bash
@@ -95,7 +95,7 @@ cd frontend && npm install && npm start
 
 ---
 
-## 📦 Module breakdown
+## Module breakdown
 
 | # | Module | File | Owned by |
 |---|--------|------|----------|
@@ -109,7 +109,7 @@ cd frontend && npm install && npm start
 
 ---
 
-## 🧩 Module 1 — Static Analysis
+## Module 1 — Static Analysis
 - Decompiles APK with JADX + Androguard
 - Flags 14 dangerous permissions
 - Detects 17 suspicious API call patterns
@@ -118,7 +118,7 @@ cd frontend && npm install && npm start
 - Extracts APK signing certificate info
 - Outputs: risk score 0–100 + structured JSON
 
-## 🧩 Module 1b — Obfuscation Detection
+## Module 1b — Obfuscation Detection
 - Class-name entropy check (ProGuard/DexGuard indicator)
 - High-entropy / Base64 string scan (hidden payloads, C2 addresses)
 - Reflection usage detection (hidden API calls)
@@ -126,7 +126,7 @@ cd frontend && npm install && npm start
 - Resource/asset file-type mismatch detection
 - Outputs: obfuscation score 0–100 + level (NONE/LIGHT/MODERATE/HEAVY)
 
-## 🧩 Module 2 — Dynamic Sandbox
+## Module 2 — Dynamic Sandbox
 - Runs APK in isolated Docker + Android AVD emulator
 - Frida hooks intercept: SMS send, shell exec, device ID harvest,
   file writes, DexClassLoader, crypto key generation, HTTP connections
@@ -134,7 +134,7 @@ cd frontend && npm install && npm start
 - Sandbox auto-destroyed after analysis
 - Outputs: Frida events, network traffic log, file mutations
 
-## 🧩 Module 3 — C2 Detection + ML
+## Module 3 — C2 Detection + ML
 - 5 C2 heuristics: hardcoded IP comms, non-standard ports,
   beaconing detection, large POST exfiltration, dynamic DEX load + network
 - Threat intel: AbuseIPDB (IPs) + VirusTotal (domains)
@@ -142,7 +142,7 @@ cd frontend && npm install && npm start
 - MITRE ATT&CK for Mobile mapping (25 technique mappings)
 - Final composite score: static (30%) + ML (40%) + threat intel (20%) + C2 (10%)
 
-## 🧩 Module 3b — Correlation Engine
+## Module 3b — Correlation Engine
 - Cross-checks static + dynamic + C2 signals together
 - Confirms 8 named attack patterns (SMS stealer/OTP interceptor, banking
   trojan/overlay attack, spyware, C2 beacon/RAT, APK dropper, boot
@@ -150,7 +150,7 @@ cd frontend && npm install && npm start
 - Builds a full evidence chain per pattern for investigators
 - Outputs: confirmed patterns, partial matches, confidence % per pattern
 
-## 🧩 Module 4 — FastAPI Backend
+## Module 4 — FastAPI Backend
 - `POST /analyze` — upload APK, returns job_id
 - `GET  /status/{job_id}` — poll progress (0–100%)
 - `GET  /report/{job_id}` — full JSON results
@@ -158,7 +158,7 @@ cd frontend && npm install && npm start
 - `GET  /jobs` — list recent analyses
 - Celery async workers, PostgreSQL persistence, Redis queue
 
-## 🧩 Module 5 — React Dashboard
+## Module 5 — React Dashboard
 - Drag-and-drop APK upload
 - Live progress bar with stage tracking
 - Risk score radial gauge with MALICIOUS/SUSPICIOUS/BENIGN verdict
@@ -168,16 +168,16 @@ cd frontend && npm install && npm start
 
 ---
 
-## 🔐 Sample APKs for testing
+## Sample APKs for testing
 Download safe malware samples from:
 - https://bazaar.abuse.ch (MalwareBazaar — real Android malware)
 - https://github.com/ashishb/android-malware (curated samples)
 
-> ⚠️ Only analyze in the sandboxed environment. Never install samples on real devices.
+> Only analyze in the sandboxed environment. Never install samples on real devices.
 
 ---
 
-## 🏆 MITRE ATT&CK techniques covered
+## MITRE ATT&CK techniques covered
 
 | ID     | Technique                    | Tactic              |
 |--------|------------------------------|---------------------|
@@ -193,7 +193,7 @@ Download safe malware samples from:
 
 ---
 
-## 👥 Team
+## Team
 
 | Member | Role |
 |--------|------|
@@ -203,5 +203,5 @@ Download safe malware samples from:
 
 ---
 
-## 📄 License
+## License
 MIT — built for CideCode 2K26, CCITR / PES University, Bengaluru.
