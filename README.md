@@ -190,17 +190,6 @@ Download safe malware samples from:
 | T1406  | Obfuscated Files             | Defense Evasion     |
 | T1582  | SMS Control                  | Impact              |
 | + 17 more...                                          |
-
----
-
-## Team
-
-| Member | Role |
-|--------|------|
-| Member 1 | APK analyst — static analysis, obfuscation detection, YARA rules |
-| Member 2 | Network forensics — sandbox, Frida, C2 detection |
-| Member 3 | Backend + ML + Frontend — FastAPI, classifier, correlation engine, scoring, React dashboard, PDF reports, pitch |
-
 ---
 
 ## License
